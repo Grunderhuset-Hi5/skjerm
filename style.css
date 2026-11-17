@@ -1,0 +1,266 @@
+/*
+ * Hi5 lobby screen. Target: Samsung Flip, Samsung Browser 2.2 = Chromium 63.
+ * Avoid: flex `gap`, `inset`, `aspect-ratio`, `clamp()`/`min()`/`max()`, `:is()`.
+ * Sizes are in vh so the layout scales with whatever zoom the TV browser applies.
+ */
+
+@font-face { font-family: "Poppins"; font-weight: 400; font-display: swap; src: url("assets/fonts/poppins-400.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-weight: 600; font-display: swap; src: url("assets/fonts/poppins-600.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-weight: 700; font-display: swap; src: url("assets/fonts/poppins-700.woff2") format("woff2"); }
+
+:root {
+  --bg: #141414;
+  --panel: #262626;
+  --text: #f4f4f2;
+  --muted: #a8a8a8;
+  --faint: #5a5a5a;
+  --orange: #eb651c;
+  --amber: #ffb800;
+  --charcoal: #333333;
+  --rotate-ms: 12000ms;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Poppins", "SamsungOne", "Helvetica Neue", Arial, sans-serif;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.screen {
+  display: grid;
+  grid-template-columns: 62fr 38fr;
+  grid-template-rows: minmax(0, 1fr);
+  grid-column-gap: 3.5vw;
+  box-sizing: border-box;
+  height: 100vh;
+  padding: 5vh 3.5vw;
+}
+
+/* ---------------------------------------------------------------- feature */
+
+.feature { min-width: 0; min-height: 0; }
+
+.feature-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 500ms ease;
+}
+.feature-inner.fading { opacity: 0; }
+
+.media {
+  position: relative;
+  flex: none;
+  height: 50vh;
+  overflow: hidden;
+  border-radius: 1.4vh;
+  background: var(--panel);
+}
+
+.backdrop {
+  position: absolute;
+  top: -8%; left: -8%; right: -8%; bottom: -8%;
+  background-size: cover;
+  background-position: center;
+  -webkit-filter: blur(3vh) brightness(0.55);
+  filter: blur(3vh) brightness(0.55);
+}
+
+.photo {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Typographic card for events without an image */
+.card {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  box-sizing: border-box;
+  padding: 6vh 4vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #1a1a1a;
+}
+.card-orange { background: var(--orange); }
+.card-amber { background: var(--amber); }
+.card-charcoal { background: var(--charcoal); color: var(--text); }
+
+.card-day {
+  font-size: 4.6vh;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.card-date {
+  font-size: 17vh;
+  font-weight: 700;
+  line-height: 1;
+  margin: 1vh 0 2vh -0.06em;
+  letter-spacing: -0.02em;
+}
+.card-time {
+  font-size: 4.6vh;
+  font-weight: 600;
+}
+.card-charcoal .card-day,
+.card-charcoal .card-time { color: var(--orange); }
+.card-logo {
+  position: absolute;
+  right: 3vw;
+  bottom: 5vh;
+  height: 11vh;
+}
+.card-empty .card-date { font-size: 9vh; }
+
+.meta {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  padding-top: 2.5vh;
+}
+.meta-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-right: 3vw;
+}
+.when {
+  font-size: 3.6vh;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--orange);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.title {
+  margin-top: 0.8vh;
+  font-size: 6.2vh;
+  font-weight: 700;
+  line-height: 1.12;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.qr { flex: none; width: 17vh; text-align: center; }
+.qr img {
+  display: block;
+  width: 17vh;
+  height: 17vh;
+  background: #fff;
+  border-radius: 1vh;
+}
+.qr-caption {
+  margin-top: 0.8vh;
+  font-size: 2.2vh;
+  color: var(--muted);
+}
+.qr.hidden { visibility: hidden; }
+
+/* ------------------------------------------------------------------- side */
+
+.side {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3vh;
+}
+.heading {
+  font-size: 3vh;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.logo { height: 9vh; }
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  position: relative;
+  overflow: hidden;
+  padding: 1.5vh 1.4vw 1.7vh 1.8vw;
+  margin-bottom: 1vh;
+  border-radius: 1vh;
+}
+.row::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 0.6vh;
+  background: transparent;
+}
+.row.active { background: var(--panel); }
+.row.active::before { background: var(--orange); }
+
+.row-when {
+  font-size: 2.8vh;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row.active .row-when { color: var(--orange); }
+
+.row-title {
+  margin-top: 0.3vh;
+  font-size: 3.8vh;
+  font-weight: 600;
+  color: #d6d6d4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row.active .row-title { color: var(--text); }
+
+.progress {
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 0.4vh;
+  width: 0;
+  background: var(--orange);
+  opacity: 0.7;
+}
+.row.active .progress {
+  -webkit-animation: fill var(--rotate-ms) linear forwards;
+  animation: fill var(--rotate-ms) linear forwards;
+}
+@-webkit-keyframes fill { from { width: 0; } to { width: 100%; } }
+@keyframes fill { from { width: 0; } to { width: 100%; } }
+
+.status {
+  flex: none;
+  font-size: 1.6vh;
+  color: var(--faint);
+  text-align: right;
+}
+.status.stale { color: var(--amber); }

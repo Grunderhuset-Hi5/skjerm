@@ -1,0 +1,139 @@
+{
+ "app_version": "21a213c6e241",
+ "calendar": "Felleskalender Gründerhuset Hi5",
+ "events": [
+  {
+   "all_day": false,
+   "end": "2026-11-24T12:00:00+01:00",
+   "id": "38drlj8if8l5c8f3f0p9v2q41v@google.com@2026-11-24T09:00:00+01:00",
+   "image": "data/img/289b6d8c9751b395.webp",
+   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=26948",
+   "location": "Webinar",
+   "qr": "data/qr/f7e7ee310a533285.svg",
+   "start": "2026-11-24T09:00:00+01:00",
+   "title": "WEBINAR: Lag bilder, musikk og video med kunstig intelligens"
+  },
+  {
+   "all_day": false,
+   "end": "2026-11-25T16:00:00+01:00",
+   "id": "3695884geqmp7nchm887jlofq8@google.com@2026-11-25T13:00:00+01:00",
+   "image": "data/img/9ada4d24aabca2c1.webp",
+   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=28118",
+   "location": "Colab Larvik",
+   "qr": "data/qr/df445db436e7e896.svg",
+   "start": "2026-11-25T13:00:00+01:00",
+   "title": "Podkast som verktøy: fra idé til ferdig episode"
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-02T12:30:00+01:00",
+   "id": "C8F3EDE3-7933-48E2-87A1-042CBEDFB68F@2026-12-02T11:30:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "qr": null,
+   "start": "2026-12-02T11:30:00+01:00",
+   "title": "Vaffelfest 🧇"
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-02T16:00:00+01:00",
+   "id": "B2369AEB-C11C-405A-B13D-D218D49B63A8@2026-12-02T13:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "qr": null,
+   "start": "2026-12-02T13:00:00+01:00",
+   "title": "Onsdagsressursene"
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-02T20:00:00+01:00",
+   "id": "5h0pa1qidjs9uah9p0p8jmc234@google.com@2026-12-02T16:30:00+01:00",
+   "image": "data/img/f07ce6a6f23a6040.webp",
+   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=28120",
+   "location": "Colab, Kongegata 29, 3256 Larvik",
+   "qr": "data/qr/20cddb571c674845.svg",
+   "start": "2026-12-02T16:30:00+01:00",
+   "title": "Historiefortelling som skaper engasjement, tillit og handling!"
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-09T11:00:00+01:00",
+   "id": "5781186E-A00C-46EA-8230-009220E72AB8@2026-12-09T09:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "qr": null,
+   "start": "2026-12-09T09:00:00+01:00",
+   "title": "Workshop om annonsering / Amedia"
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-09T21:00:00+01:00",
+   "id": "70ltkm4t3hvhqlj81s0fmade72@google.com@2026-12-09T18:00:00+01:00",
+   "image": "data/img/6f3e8deacdac2b8f.webp",
+   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=23947",
+   "location": "Gründerhuset Hi5, Tønsberg",
+   "qr": "data/qr/af7972918ab49b58.svg",
+   "start": "2026-12-09T18:00:00+01:00",
+   "title": "INTROKURS: Klar - Ferdig - Start"
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-10T15:55:00+01:00",
+   "id": "D4DE22A9-53B3-484C-97F3-BD72CF6E4FD8@2026-12-10T12:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "qr": null,
+   "start": "2026-12-10T12:00:00+01:00",
+   "title": "Julelunsj Gründerhuset Hi5"
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-10T19:00:00+01:00",
+   "id": "B1F58777-3797-484E-BF1F-7E29648572D6@2026-12-10T16:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "qr": null,
+   "start": "2026-12-10T16:00:00+01:00",
+   "title": "Afterwork Gründerhuset Hi5"
+  },
+  {
+   "all_day": false,
+   "end": "2027-01-06T12:30:00+01:00",
+   "id": "C8F3EDE3-7933-48E2-87A1-042CBEDFB68F@2027-01-06T11:30:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "qr": null,
+   "start": "2027-01-06T11:30:00+01:00",
+   "title": "Vaffelfest 🧇"
+  },
+  {
+   "all_day": false,
+   "end": "2027-01-06T16:00:00+01:00",
+   "id": "B2369AEB-C11C-405A-B13D-D218D49B63A8@2027-01-06T13:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "qr": null,
+   "start": "2027-01-06T13:00:00+01:00",
+   "title": "Onsdagsressursene"
+  },
+  {
+   "all_day": false,
+   "end": "2027-01-14T15:00:00+01:00",
+   "id": "4epvumlf34u2mr2j0ve61a7kij@google.com@2027-01-14T14:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "Gründerhuset Hi5, Rådhusgaten 1, 3126 Tønsberg, Norway",
+   "qr": null,
+   "start": "2027-01-14T14:00:00+01:00",
+   "title": "Allmøte Gründerhuset Hi5"
+  }
+ ],
+ "generated": "2026-11-17T15:17:35+01:00"
+}

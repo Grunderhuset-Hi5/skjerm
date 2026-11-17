@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hi5 skjerm — test</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #141414;
+    color: #eaeaea;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+  }
+  /* Edge frame: if any red edge or corner label is missing on the TV, it is cropping (overscan). */
+  .frame {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border: 4px solid #e5484d;
+    pointer-events: none;
+  }
+  .corner {
+    position: fixed;
+    font-size: 14px;
+    color: #e5484d;
+    padding: 6px 10px;
+  }
+  .tl { top: 0; left: 0; }
+  .tr { top: 0; right: 0; }
+  .bl { bottom: 0; left: 0; }
+  .br { bottom: 0; right: 0; }
+
+  .wrap {
+    padding: 4vh 5vw;
+  }
+  .clock {
+    font-size: 12vh;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .date {
+    font-size: 4vh;
+    color: #a0a0a0;
+    margin-top: 1vh;
+  }
+  .cols {
+    margin-top: 4vh;
+    overflow: hidden;
+  }
+  .col {
+    float: left;
+    width: 48%;
+    margin-right: 2%;
+  }
+  h2 {
+    font-size: 2.4vh;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7a7a7a;
+    margin: 0 0 1.5vh;
+  }
+  table {
+    border-collapse: collapse;
+    font-size: 2.2vh;
+  }
+  td {
+    padding: 0.4vh 2vw 0.4vh 0;
+    vertical-align: top;
+  }
+  td:first-child { color: #8a8a8a; }
+  .ok { color: #46a758; }
+  .no { color: #e5484d; }
+  .ua {
+    font-size: 1.6vh;
+    color: #8a8a8a;
+    margin-top: 2vh;
+    word-break: break-all;
+  }
+  .sizes div { margin-bottom: 1vh; line-height: 1.1; }
+</style>
+</head>
+<body>
+<div class="frame"></div>
+<div class="corner tl">↖ top left</div>
+<div class="corner tr">top right ↗</div>
+<div class="corner bl">↙ bottom left</div>
+<div class="corner br">bottom right ↘</div>
+
+<div class="wrap">
+  <div class="clock" id="clock">--:--:--</div>
+  <div class="date" id="date"></div>
+
+  <div class="cols">
+    <div class="col">
+      <h2>Screen and browser</h2>
+      <table id="info"></table>
+      <div class="ua" id="ua"></div>
+    </div>
+    <div class="col">
+      <h2>Readable across the room?</h2>
+      <div class="sizes">
+        <div style="font-size:24px">24 px — Frokostmøte med Sparebanken</div>
+        <div style="font-size:36px">36 px — Frokostmøte med Sparebanken</div>
+        <div style="font-size:48px">48 px — Frokostmøte</div>
+        <div style="font-size:72px">72 px — Frokost</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Deliberately ES5 only, so old TV browsers can run it. Bump BUILD on every deploy.
+var BUILD = "2026-11-17 a";
+var loadedAt = new Date();
+var DAYS = ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"];
+
+function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+function tick() {
+  var d = new Date();
+  document.getElementById("clock").textContent =
+    pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  document.getElementById("date").textContent =
+    DAYS[d.getDay()] + " " + d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  var mins = Math.floor((d - loadedAt) / 60000);
+  setRow("uptime", Math.floor(mins / 60) + " h " + (mins % 60) + " min (since " +
+    pad(loadedAt.getHours()) + ":" + pad(loadedAt.getMinutes()) + ")");
+}
+
+var rows = {};
+function setRow(key, value, cls) {
+  var row = rows[key];
+  if (!row) {
+    row = document.createElement("tr");
+    var k = document.createElement("td");
+    var v = document.createElement("td");
+    k.textContent = key;
+    row.appendChild(k);
+    row.appendChild(v);
+    document.getElementById("info").appendChild(row);
+    rows[key] = row;
+  }
+  var cell = row.childNodes[1];
+  cell.textContent = value;
+  cell.className = cls || "";
+}
+
+function yesNo(key, ok) { setRow(key, ok ? "yes" : "no", ok ? "ok" : "no"); }
+
+function syntaxOk(src) {
+  try { new Function(src); return true; } catch (e) { return false; }
+}
+
+function cssOk(prop, value) {
+  try {
+    if (window.CSS && CSS.supports) { return CSS.supports(prop, value); }
+  } catch (e) {}
+  var el = document.createElement("div");
+  el.style.cssText = prop + ":" + value;
+  return el.style.length > 0;
+}
+
+setRow("build", BUILD);
+setRow("viewport", window.innerWidth + " × " + window.innerHeight);
+setRow("screen", screen.width + " × " + screen.height);
+setRow("pixel ratio", String(window.devicePixelRatio || 1));
+setRow("uptime", "0 h 0 min");
+
+yesNo("fetch", typeof window.fetch === "function");
+yesNo("Promise", typeof window.Promise === "function");
+yesNo("arrow functions", syntaxOk("var f = () => 1;"));
+yesNo("async/await", syntaxOk("async function f() { await 1; }"));
+yesNo("CSS grid", cssOk("display", "grid"));
+yesNo("CSS variables", cssOk("--x", "1"));
+yesNo("object-fit", cssOk("object-fit", "cover"));
+
+var webp = false;
+try {
+  var c = document.createElement("canvas");
+  webp = c.toDataURL && c.toDataURL("image/webp").indexOf("data:image/webp") === 0;
+} catch (e) {}
+yesNo("WebP images", webp);
+
+// Same-origin JSON load: the real page will work exactly like this.
+setRow("JSON load", "loading…");
+var t0 = new Date().getTime();
+try {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "test.json?t=" + t0, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState !== 4) { return; }
+    var ms = new Date().getTime() - t0;
+    try {
+      var data = JSON.parse(xhr.responseText);
+      setRow("JSON load", "ok, " + ms + " ms (" + data.message + ")", "ok");
+    } catch (e) {
+      setRow("JSON load", "failed: HTTP " + xhr.status, "no");
+    }
+  };
+  xhr.send();
+} catch (e) {
+  setRow("JSON load", "failed: " + e.message, "no");
+}
+
+// Ask the browser not to let the screen sleep. Most TV browsers lack this; worth knowing.
+if (navigator.wakeLock && navigator.wakeLock.request) {
+  setRow("wake lock", "requesting…");
+  navigator.wakeLock.request("screen").then(function () {
+    setRow("wake lock", "held", "ok");
+  }, function (e) {
+    setRow("wake lock", "refused: " + e.message, "no");
+  });
+} else {
+  yesNo("wake lock", false);
+}
+
+document.getElementById("ua").textContent = navigator.userAgent;
+
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
