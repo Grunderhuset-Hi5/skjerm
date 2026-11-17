@@ -57,7 +57,7 @@ html, body {
 .media {
   position: relative;
   flex: none;
-  height: 50vh;
+  height: 54vh;
   overflow: hidden;
   border-radius: 1.4vh;
   background: var(--panel);
@@ -135,7 +135,7 @@ html, body {
   margin-right: 3vw;
 }
 .when {
-  font-size: 3.6vh;
+  font-size: 3vh;
   font-weight: 600;
   line-height: 1.25;
   color: var(--orange);
@@ -146,7 +146,7 @@ html, body {
 }
 .title {
   margin-top: 0.8vh;
-  font-size: 6.2vh;
+  font-size: 4.6vh;
   font-weight: 700;
   line-height: 1.12;
   display: -webkit-box;
@@ -187,7 +187,7 @@ html, body {
   margin-bottom: 3vh;
 }
 .heading {
-  font-size: 3vh;
+  font-size: 2.6vh;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -222,7 +222,7 @@ html, body {
 .row.active::before { background: var(--orange); }
 
 .row-when {
-  font-size: 2.8vh;
+  font-size: 2.3vh;
   font-weight: 600;
   color: var(--muted);
   white-space: nowrap;
@@ -233,12 +233,14 @@ html, body {
 
 .row-title {
   margin-top: 0.3vh;
-  font-size: 3.8vh;
+  font-size: 2.9vh;
   font-weight: 600;
+  line-height: 1.2;
   color: #d6d6d4;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 .row.active .row-title { color: var(--text); }
 
