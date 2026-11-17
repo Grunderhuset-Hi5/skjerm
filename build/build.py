@@ -32,6 +32,7 @@ from typing import Any, Iterable, Optional, Protocol
 from urllib.parse import parse_qs, urljoin, urlparse
 from zoneinfo import ZoneInfo
 
+import emoji
 import icalendar
 import recurring_ical_events
 import requests
@@ -52,6 +53,8 @@ MAX_DOWNLOAD_BYTES = 15 * 1024 * 1024
 CACHE_TTL = dt.timedelta(hours=24)
 ERROR_TTL = dt.timedelta(hours=1)
 USER_AGENT = "Hi5-skjerm/1.0 (+https://github.com/Grunderhuset-Hi5/skjerm)"
+# The TV's emoji font predates Unicode 12, so emoji in titles are drawn as Twemoji SVGs.
+TWEMOJI_URL = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/{code}.svg"
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -379,6 +382,76 @@ def save_qr(link: str, data_dir: Path) -> str:
     return rel
 
 
+# ------------------------------------------------------------------ emoji
+
+
+def twemoji_code(seq: str) -> str:
+    """Twemoji file name for an emoji sequence (same rule as twemoji.js)."""
+    if "‍" not in seq:
+        seq = seq.replace("️", "")
+    return "-".join(f"{ord(c):x}" for c in seq)
+
+
+def _wants_image(seq: str) -> bool:
+    # Plain text-style symbols (©, ™, ↔) render fine in the TV's normal font.
+    return "️" in seq or any(ord(c) >= 0x1F000 for c in seq)
+
+
+def split_emoji(text: str) -> list[tuple[str, str]]:
+    """Split into ('text', s) and ('emoji', s) parts, in order."""
+    parts: list[tuple[str, str]] = []
+    pos = 0
+    for match in emoji.emoji_list(text):
+        if not _wants_image(match["emoji"]):
+            continue
+        if match["match_start"] > pos:
+            parts.append(("text", text[pos:match["match_start"]]))
+        parts.append(("emoji", match["emoji"]))
+        pos = match["match_end"]
+    if pos < len(text):
+        parts.append(("text", text[pos:]))
+    return parts
+
+
+def title_parts(title: str, emoji_src) -> Optional[list[dict]]:
+    """Title as text/emoji parts for the page, or None if it has no emoji."""
+    parts = split_emoji(title)
+    if not any(kind == "emoji" for kind, _ in parts):
+        return None
+    out = []
+    for kind, value in parts:
+        src = emoji_src(value) if kind == "emoji" else None
+        out.append({"emoji": value, "src": src} if src else {"text": value})
+    return out
+
+
+class EmojiStore:
+    """Downloads Twemoji SVGs into data/emoji/ on first use."""
+
+    def __init__(self, session: HttpSession, data_dir: Path):
+        self.session = session
+        self.data_dir = data_dir
+        self.used: set[str] = set()
+
+    def __call__(self, seq: str) -> Optional[str]:
+        code = twemoji_code(seq)
+        rel = f"data/emoji/{code}.svg"
+        path = self.data_dir.parent / rel
+        if not path.exists():
+            try:
+                resp = self.session.get(TWEMOJI_URL.format(code=code), timeout=20)
+                resp.raise_for_status()
+                if not resp.content.lstrip().startswith(b"<svg"):
+                    raise FetchError("not an SVG")
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(resp.content)
+            except (requests.RequestException, FetchError) as exc:
+                print(f"warn: emoji {seq!r} ({code}): {exc}", file=sys.stderr)
+                return None  # the page shows the character as text instead
+        self.used.add(path.name)
+        return rel
+
+
 # ----------------------------------------------------------------- output
 
 
@@ -392,13 +465,16 @@ def app_version(root: Path = ROOT) -> str:
     return digest.hexdigest()[:12]
 
 
-def build_payload(cal: icalendar.Calendar, now: dt.datetime, resolver: MediaResolver, version: str) -> dict:
+def build_payload(
+    cal: icalendar.Calendar, now: dt.datetime, resolver: MediaResolver, emoji_src, version: str
+) -> dict:
     events = []
     for ev in select_events(cal, now):
         image, link = resolver.resolve(ev.urls)
         events.append({
             "id": ev.uid,
             "title": ev.title,
+            "title_parts": title_parts(ev.title, emoji_src),
             "start": ev.start.isoformat(),
             "end": ev.end.isoformat(),
             "all_day": ev.all_day,
@@ -455,13 +531,15 @@ def main() -> int:
         cache = {}  # first run or cache evicted: everything gets looked up again
     resolver = MediaResolver(session, DATA, cache, now)
 
-    payload = build_payload(cal, now, resolver, app_version())
+    emoji_store = EmojiStore(session, DATA)
+    payload = build_payload(cal, now, resolver, emoji_store, app_version())
     changed = write_json_if_changed(DATA / "events.json", payload)
     write_json_if_changed(CACHE_FILE, resolver.prune_cache(), ignore=())
 
     keep_img = {Path(e["image"]).name for e in payload["events"] if e["image"]}
     keep_qr = {Path(e["qr"]).name for e in payload["events"] if e["qr"]}
-    removed = prune_dir(DATA / "img", keep_img) + prune_dir(DATA / "qr", keep_qr)
+    removed = (prune_dir(DATA / "img", keep_img) + prune_dir(DATA / "qr", keep_qr)
+               + prune_dir(DATA / "emoji", emoji_store.used))
 
     print(f"{len(payload['events'])} events, events.json {'updated' if changed else 'unchanged'}"
           f"{', removed ' + str(len(removed)) + ' stale files' if removed else ''}")

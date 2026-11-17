@@ -131,6 +131,7 @@
     events.slice(0, LIST_MAX).forEach((ev) => {
       if (ev.image) { new Image().src = ev.image; }
       if (ev.qr) { new Image().src = ev.qr; }
+      (ev.title_parts || []).forEach((part) => { if (part.src) new Image().src = part.src; });
     });
   }
 
@@ -201,6 +202,27 @@
     }
   }
 
+  // Titles with emoji arrive as parts; emoji are Twemoji SVGs because the TV's
+  // emoji font is too old for newer ones like 🧇.
+  function setTitle(node, ev) {
+    node.textContent = '';
+    if (!ev) return;
+    if (!ev.title_parts) {
+      node.textContent = ev.title;
+      return;
+    }
+    ev.title_parts.forEach((part) => {
+      if (part.src) {
+        const img = el('img', 'emoji');
+        img.src = part.src;
+        img.alt = part.emoji;
+        node.appendChild(img);
+      } else {
+        node.appendChild(document.createTextNode(part.text || ''));
+      }
+    });
+  }
+
   function renderFeature(ev, now) {
     // Rebuilding an unchanged image every rotation can flicker on the TV.
     // The key includes the date so a card's "I dag"/"I morgen" still updates.
@@ -210,7 +232,7 @@
       state.currentMediaKey = mediaKey;
     }
     $('feature-when').textContent = ev ? featureWhen(ev, now) : '';
-    $('feature-title').textContent = ev ? ev.title : '';
+    setTitle($('feature-title'), ev);
     const qr = $('feature-qr');
     if (ev && ev.qr) {
       $('feature-qr-img').src = ev.qr;
@@ -226,7 +248,9 @@
     events.forEach((ev) => {
       const row = el('li', 'row' + (ev.id === activeId && events.length > 1 ? ' active' : ''));
       row.appendChild(el('div', 'row-when', rowWhen(ev, now)));
-      row.appendChild(el('div', 'row-title', ev.title));
+      const title = el('div', 'row-title');
+      setTitle(title, ev);
+      row.appendChild(title);
       row.appendChild(el('div', 'progress'));
       list.appendChild(row);
     });

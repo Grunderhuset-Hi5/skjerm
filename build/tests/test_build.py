@@ -250,6 +250,44 @@ def test_cache_avoids_refetch_and_survives_outage(tmp_path, site):
     assert image and link == "https://ev.no/event/1"
 
 
+@pytest.mark.parametrize("seq, code", [
+    ("🧇", "1f9c7"),
+    ("❤️", "2764"),                       # FE0F dropped when there's no ZWJ
+    ("👩‍💻", "1f469-200d-1f4bb"),          # ZWJ sequence
+    ("🇳🇴", "1f1f3-1f1f4"),                # flag
+    ("👍🏽", "1f44d-1f3fd"),                # skin tone
+])
+def test_twemoji_code(seq, code):
+    assert build.twemoji_code(seq) == code
+
+
+def test_split_emoji_leaves_plain_symbols_as_text():
+    assert build.split_emoji("Vaffelfest 🧇 © Hi5") == [
+        ("text", "Vaffelfest "), ("emoji", "🧇"), ("text", " © Hi5"),
+    ]
+
+
+def test_title_parts():
+    src = lambda seq: f"data/emoji/{build.twemoji_code(seq)}.svg"  # noqa: E731
+    assert build.title_parts("Allmøte", src) is None
+    assert build.title_parts("🧇 Vaffelfest", src) == [
+        {"emoji": "🧇", "src": "data/emoji/1f9c7.svg"}, {"text": " Vaffelfest"},
+    ]
+    # Download failed: keep the character as text.
+    assert build.title_parts("Vaffel 🧇", lambda seq: None) == [{"text": "Vaffel "}, {"text": "🧇"}]
+
+
+def test_emoji_store_downloads_once(tmp_path):
+    svg = b'<svg xmlns="http://www.w3.org/2000/svg"></svg>'
+    url = build.TWEMOJI_URL.format(code="1f9c7")
+    session = FakeSession({url: (svg, "image/svg+xml")})
+    store = build.EmojiStore(session, tmp_path / "data")
+    assert store("🧇") == "data/emoji/1f9c7.svg"
+    assert store("🧇") == "data/emoji/1f9c7.svg"
+    assert session.calls == [url]
+    assert store.used == {"1f9c7.svg"}
+
+
 def test_qr_is_svg(tmp_path):
     data = tmp_path / "data"
     rel = build.save_qr("https://example.org/x", data)

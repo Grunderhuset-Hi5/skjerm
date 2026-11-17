@@ -20,7 +20,10 @@ The first web link also becomes the QR code. Changes show up within about 30 min
 - `.github/workflows/build.yml` runs `build/build.py` every 15 minutes. It fetches the calendar, expands recurring events, finds images and links, and commits `data/events.json`, resized images (`data/img/`) and QR codes (`data/qr/`) when anything changed.
 - `index.html`, `app.js`, `style.css` render that JSON. The TV runs Samsung Browser 2.2, which uses the Chromium 63 engine, so `app.js` is limited to ES2017 (CI checks this) and the CSS avoids newer features.
 - The page refetches data every 5 minutes. It reloads itself when the page code changes, and once a day around 04:00.
+- Emoji in titles are replaced with Twemoji SVGs (`data/emoji/`), because the TV's emoji font predates Unicode 12 and shows newer ones like 🧇 as blanks.
 - `test.html` is a diagnostic page: screen size, browser features, overscan frame.
+
+Emoji graphics: [Twemoji](https://github.com/jdecked/twemoji), © Twitter, Inc. and other contributors, licensed [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ## Local development
 

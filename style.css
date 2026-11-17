@@ -155,6 +155,13 @@ html, body {
   overflow: hidden;
 }
 
+.emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0 0.05em;
+  vertical-align: -0.12em;
+}
+
 .qr { flex: none; width: 17vh; text-align: center; }
 .qr img {
   display: block;
