@@ -1,5 +1,5 @@
 {
- "app_version": "79a14855194d",
+ "app_version": "5b4478ff4b4c",
  "calendar": "Felleskalender Gründerhuset Hi5",
  "events": [
   {
@@ -29,8 +29,8 @@
   {
    "all_day": false,
    "end": "2026-12-02T12:30:00+01:00",
-   "id": "C8F3EDE3-7933-48E2-87A1-042CBEDFB68F@2026-12-02T11:30:00+01:00",
-   "image": null,
+   "id": "_8cs4ccq58h2j6b9n74pj6b9k712j4b9o6t0j2b9g6gp46gi58h344dho8o_R20261202T103000@google.com@2026-12-02T11:30:00+01:00",
+   "image": "data/img/4847208a716bbb46.webp",
    "link": null,
    "location": "",
    "qr": null,
@@ -121,8 +121,8 @@
   {
    "all_day": false,
    "end": "2027-01-06T12:30:00+01:00",
-   "id": "C8F3EDE3-7933-48E2-87A1-042CBEDFB68F@2027-01-06T11:30:00+01:00",
-   "image": null,
+   "id": "_8cs4ccq58h2j6b9n74pj6b9k712j4b9o6t0j2b9g6gp46gi58h344dho8o_R20261202T103000@google.com@2027-01-06T11:30:00+01:00",
+   "image": "data/img/4847208a716bbb46.webp",
    "link": null,
    "location": "",
    "qr": null,
@@ -163,5 +163,5 @@
    "title_parts": null
   }
  ],
- "generated": "2026-11-17T16:43:04+01:00"
+ "generated": "2026-11-17T23:01:27+01:00"
 }
