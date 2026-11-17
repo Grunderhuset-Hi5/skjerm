@@ -13,7 +13,7 @@
   const POLL_MS = 5 * 60 * 1000;
   const ROTATE_MS = 12000;
   const FADE_MS = 500;
-  const LIST_MAX = 5;
+  const LIST_MAX = 7;
   const STALE_MS = 60 * 60 * 1000;
   const RELOAD_HOUR = 4; // daily fresh page load, early morning
   const RELOAD_DELAY_MS = 11 * 60 * 1000;
@@ -96,10 +96,10 @@
     return parts.join(' · ');
   }
 
+  // [day, time] for the list's date column
   function rowWhen(ev, now) {
-    if (isOngoing(ev, now)) return 'Pågår nå';
-    const time = ev.all_day ? timeRange(ev) : hhmm(ev.startDate);
-    return dayWord(ev.startDate, now, true) + ' · ' + time;
+    if (isOngoing(ev, now)) return ['Pågår nå', ev.all_day ? '' : 'til ' + hhmm(ev.endDate)];
+    return [dayWord(ev.startDate, now, true), ev.all_day ? timeRange(ev) : hhmm(ev.startDate)];
   }
 
   // ------------------------------------------------------------ data
@@ -247,7 +247,11 @@
     list.innerHTML = '';
     events.forEach((ev) => {
       const row = el('li', 'row' + (ev.id === activeId && events.length > 1 ? ' active' : ''));
-      row.appendChild(el('div', 'row-when', rowWhen(ev, now)));
+      const when = rowWhen(ev, now);
+      const whenCol = el('div', 'row-when');
+      whenCol.appendChild(el('div', 'row-day', when[0]));
+      whenCol.appendChild(el('div', 'row-time', when[1]));
+      row.appendChild(whenCol);
       const title = el('div', 'row-title');
       setTitle(title, ev);
       row.appendChild(title);
