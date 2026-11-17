@@ -7,7 +7,10 @@ preview image and a link for each upcoming event, and writes:
     data/events.json        what the page renders
     data/img/<hash>.webp    resized preview images
     data/qr/<hash>.svg      QR codes for event links
-    data/media-cache.json   per-URL lookup results, so sites aren't hit every run
+
+Per-URL lookup results are cached in build/.cache/ (persisted by the
+workflow's actions/cache step, not committed), so linked sites aren't
+fetched every 15 minutes and commits only happen when screen content changes.
 
 Image sources per event, first hit wins: a direct image URL or Google Drive
 attachment, then the og:image of the first web page linked from the event.
@@ -52,6 +55,7 @@ USER_AGENT = "Hi5-skjerm/1.0 (+https://github.com/Grunderhuset-Hi5/skjerm)"
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
+CACHE_FILE = ROOT / "build" / ".cache" / "media-cache.json"
 APP_FILES = ("index.html", "app.js", "style.css")
 
 # Hosts whose og:image is a product logo, not something about the event.
@@ -328,6 +332,9 @@ class MediaResolver:
         return self._site_defaults[root]
 
     def _try_image(self, url: str, key: str) -> Optional[str]:
+        rel = f"data/img/{short_hash(key)}.webp"
+        if (self.data_dir.parent / rel).exists():
+            return rel  # already have it; skip the download
         try:
             resp = self._get(url)
             return self._save_image(resp.content, key=key)
@@ -442,13 +449,15 @@ def main() -> int:
     resp.raise_for_status()
     cal = load_calendar(resp.content)
 
-    cache_path = DATA / "media-cache.json"
-    cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
+    try:
+        cache = json.loads(CACHE_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        cache = {}  # first run or cache evicted: everything gets looked up again
     resolver = MediaResolver(session, DATA, cache, now)
 
     payload = build_payload(cal, now, resolver, app_version())
     changed = write_json_if_changed(DATA / "events.json", payload)
-    write_json_if_changed(cache_path, resolver.prune_cache(), ignore=())
+    write_json_if_changed(CACHE_FILE, resolver.prune_cache(), ignore=())
 
     keep_img = {Path(e["image"]).name for e in payload["events"] if e["image"]}
     keep_qr = {Path(e["qr"]).name for e in payload["events"] if e["qr"]}
