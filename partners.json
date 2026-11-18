@@ -75,6 +75,19 @@
         "colablarvik.no"
       ],
       "scale": 0.9
+    },
+    {
+      "name": "FRIENDS:",
+      "logo": "assets/partners/friends.png",
+      "aliases": [
+        "FRIENDS:",
+        "Friends",
+        "Friends at Work"
+      ],
+      "domains": [
+        "friendsatwork.no"
+      ],
+      "scale": 0.7
     }
   ]
 }
