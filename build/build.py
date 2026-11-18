@@ -25,6 +25,7 @@ import io
 import json
 import re
 import sys
+import unicodedata
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
@@ -137,6 +138,30 @@ def extract_urls(*texts: Any) -> list[str]:
 def clean_location(raw: Any) -> str:
     lines = [line.strip() for line in str(raw or "").splitlines()]
     return ", ".join(line for line in lines if line)
+
+
+# Calendar convention: events at Hi5 have no location, or one starting with
+# "Gründerhuset". Everything else is shown on screen as being elsewhere.
+HOME_PREFIX = "grunderhuset"
+ONLINE_RE = re.compile(r"\b(webinar|online|digital|digitalt|teams|zoom|meet|pa nett)\b")
+COUNTRY_SUFFIX_RE = re.compile(r",\s*(norway|norge)\s*$", re.IGNORECASE)
+
+
+def _fold(text: str) -> str:
+    """Lowercase, accents stripped: 'Gründerhuset' -> 'grunderhuset'."""
+    return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower().strip()
+
+
+def place_info(location: str) -> tuple[Optional[str], Optional[str]]:
+    """(label, kind) for events away from Hi5; (None, None) for events at Hi5.
+
+    kind is "online" for webinars/online meetings, otherwise "away".
+    """
+    folded = _fold(location)
+    if not folded or folded.startswith(HOME_PREFIX):
+        return None, None
+    label = COUNTRY_SUFFIX_RE.sub("", location).strip()
+    return label, ("online" if ONLINE_RE.search(folded) else "away")
 
 
 def load_calendar(ics: bytes) -> icalendar.Calendar:
@@ -471,6 +496,7 @@ def build_payload(
     events = []
     for ev in select_events(cal, now):
         image, link = resolver.resolve(ev.urls)
+        place, place_kind = place_info(ev.location)
         events.append({
             "id": ev.uid,
             "title": ev.title,
@@ -479,6 +505,8 @@ def build_payload(
             "end": ev.end.isoformat(),
             "all_day": ev.all_day,
             "location": ev.location,
+            "place": place,
+            "place_kind": place_kind,
             "link": link,
             "image": image,
             "qr": save_qr(link, resolver.data_dir) if link else None,

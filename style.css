@@ -234,8 +234,8 @@ html, body {
   overflow: hidden;
   display: flex;
   align-items: flex-start;
-  padding: 1.3vh 1.4vw 1.4vh 1.6vw;
-  margin-bottom: 0.6vh;
+  padding: 1.1vh 1.4vw 1.2vh 1.6vw;
+  margin-bottom: 0.5vh;
   border-radius: 1vh;
 }
 .row::before {
@@ -253,7 +253,7 @@ html, body {
   flex: none;
   width: 8.5vw;
   margin-right: 1.2vw;
-  font-size: 2.3vh;
+  font-size: calc(2.3vh * var(--row-scale, 1));
   font-weight: 600;
   line-height: 1.3;
   color: var(--muted);
@@ -263,10 +263,12 @@ html, body {
 .row.active .row-when,
 .row.active .row-time { color: var(--orange); }
 
-.row-title {
+.row-main {
   flex: 1 1 auto;
   min-width: 0;
-  font-size: 2.9vh;
+}
+.row-title {
+  font-size: calc(2.9vh * var(--row-scale, 1));
   font-weight: 600;
   line-height: 1.2;
   color: #d6d6d4;
@@ -276,6 +278,25 @@ html, body {
   overflow: hidden;
 }
 .row.active .row-title { color: var(--text); }
+
+/* Events away from Hi5: small pin (or screen for online) and the place */
+.row-place {
+  margin-top: 0.3vh;
+  font-size: calc(2vh * var(--row-scale, 1));
+  line-height: 1.2;
+  color: #8a8a8a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.place-icon svg {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.35em;
+  vertical-align: -0.12em;
+  fill: var(--orange);
+  opacity: 0.85;
+}
 
 .progress {
   position: absolute;

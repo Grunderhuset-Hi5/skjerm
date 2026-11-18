@@ -24,6 +24,9 @@
   const MONTHS = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli',
     'august', 'september', 'oktober', 'november', 'desember'];
   const MONTHS_SHORT = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'];
+  // Material Design icons (Apache 2.0): map pin and screen, drawn in currentColor.
+  const ICON_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>';
+  const ICON_ONLINE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg>';
   const CARD_STYLES = [
     { cls: 'card-orange', logo: 'assets/logo-hvit.svg' },
     { cls: 'card-charcoal', logo: 'assets/logo-hvit-orange.svg' },
@@ -92,11 +95,16 @@
     return hhmm(ev.startDate) + ' til ' + dayWord(ev.endDate, ev.startDate, true) + ' ' + hhmm(ev.endDate);
   }
 
+  // Shown only for events away from Hi5 (the build decides). Data cached from
+  // before `place` existed falls back to the raw location.
+  function placeOf(ev) { return ev.place === undefined ? ev.location : ev.place; }
+
   function featureWhen(ev, now) {
     const parts = isOngoing(ev, now)
       ? ['Pågår nå', ev.all_day ? timeRange(ev) : 'til ' + hhmm(ev.endDate)]
       : [dayWord(ev.startDate, now, false), timeRange(ev)];
-    if (ev.location) parts.push(ev.location);
+    const place = placeOf(ev);
+    if (place) parts.push(place);
     return parts.join(' · ');
   }
 
@@ -305,6 +313,18 @@
     }
   }
 
+  // A crowded page (long titles, several events away from Hi5) shrinks the
+  // list text a little rather than cutting off the last row.
+  function fitList() {
+    const list = $('list');
+    let scale = 1;
+    list.style.setProperty('--row-scale', '1');
+    while (scale > 0.76 && list.scrollHeight > list.clientHeight + 1) {
+      scale -= 0.04;
+      list.style.setProperty('--row-scale', scale.toFixed(2));
+    }
+  }
+
   function fillList(events, page, activeId, now) {
     const list = $('list');
     list.innerHTML = '';
@@ -316,12 +336,23 @@
       whenCol.appendChild(el('div', 'row-day', when[0]));
       whenCol.appendChild(el('div', 'row-time', when[1]));
       row.appendChild(whenCol);
+      const main = el('div', 'row-main');
       const title = el('div', 'row-title');
       setTitle(title, ev);
-      row.appendChild(title);
+      main.appendChild(title);
+      if (ev.place_kind && ev.place) {
+        const place = el('div', 'row-place');
+        const icon = el('span', 'place-icon');
+        icon.innerHTML = ev.place_kind === 'online' ? ICON_ONLINE : ICON_PIN;
+        place.appendChild(icon);
+        place.appendChild(document.createTextNode(ev.place));
+        main.appendChild(place);
+      }
+      row.appendChild(main);
       row.appendChild(el('div', 'progress'));
       list.appendChild(row);
     });
+    fitList();
   }
 
   function renderStatus() {
@@ -412,6 +443,8 @@
   document.documentElement.style.setProperty('--rotate-ms', ROTATE_MS + 'ms');
   $('list').addEventListener('click', onListTap);
   $('pages').addEventListener('click', onPagesTap);
+  window.addEventListener('resize', fitList);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitList);
   loadCached();
   fetchData();
   setInterval(fetchData, POLL_MS);

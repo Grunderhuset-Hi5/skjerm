@@ -108,6 +108,21 @@ def test_multiline_location_and_description_links(events):
     assert webinar.urls == ["https://example.org/event?id=1"]
 
 
+@pytest.mark.parametrize("location, expected", [
+    ("", (None, None)),
+    ("Gründerhuset Hi5, Rådhusgaten 1, 3126 Tønsberg, Norway", (None, None)),
+    ("gründerhuset", (None, None)),
+    ("Grunderhuset Hi5", (None, None)),                       # missing ü still counts
+    ("Colab Larvik", ("Colab Larvik", "away")),
+    ("Colab, Kongegata 29, 3256 Larvik, Norway", ("Colab, Kongegata 29, 3256 Larvik", "away")),
+    ("Webinar", ("Webinar", "online")),
+    ("Teams-møte", ("Teams-møte", "online")),
+    ("Møterom på Gründerhuset", ("Møterom på Gründerhuset", "away")),  # must *start* with it
+])
+def test_place_info(location, expected):
+    assert build.place_info(location) == expected
+
+
 def test_extract_urls_trims_punctuation_and_dedupes():
     text = "Se https://a.no/x. Og (https://b.no/y), igjen https://a.no/x"
     assert build.extract_urls(text) == ["https://a.no/x", "https://b.no/y"]
