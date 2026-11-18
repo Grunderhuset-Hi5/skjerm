@@ -171,6 +171,21 @@
   },
   {
    "all_day": false,
+   "end": "2026-12-17T11:00:00+01:00",
+   "id": "533pvaifgu0pvdjbrrtrlfh6u7@google.com@2026-12-17T09:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "organisers": [],
+   "place": null,
+   "place_kind": null,
+   "qr": null,
+   "start": "2026-12-17T09:00:00+01:00",
+   "title": "Kurs/Workshop",
+   "title_parts": null
+  },
+  {
+   "all_day": false,
    "end": "2027-01-06T12:30:00+01:00",
    "id": "_8cs4ccq58h2j6b9n74pj6b9k712j4b9o6t0j2b9g6gp46gi58h344dho8o_R20261202T103000@google.com@2027-01-06T11:30:00+01:00",
    "image": "data/img/4847208a716bbb46.webp",
@@ -306,5 +321,5 @@
    "title_parts": null
   }
  ],
- "generated": "2026-11-18T13:41:44+01:00"
+ "generated": "2026-11-18T13:58:51+01:00"
 }
