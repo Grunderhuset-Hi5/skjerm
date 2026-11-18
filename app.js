@@ -37,7 +37,8 @@
     reloadScheduled: false,
     lastFetchOk: null,
     loadedAt: Date.now(),
-    rotateTimer: null
+    rotateTimer: null,
+    fadeTimer: null
   };
 
   const $ = (id) => document.getElementById(id);
@@ -244,6 +245,7 @@
     list.innerHTML = '';
     events.forEach((ev) => {
       const row = el('li', 'row' + (ev.id === activeId && events.length > 1 ? ' active' : ''));
+      row.setAttribute('data-id', ev.id);
       const when = rowWhen(ev, now);
       const whenCol = el('div', 'row-when');
       whenCol.appendChild(el('div', 'row-day', when[0]));
@@ -280,30 +282,47 @@
     return events[(idx + 1) % events.length];
   }
 
-  function step() {
-    const now = new Date();
-    const events = visibleEvents(now);
-    const ev = nextEvent(events);
+  // Show `ev` in the feature panel and restart the rotation timer from it.
+  function display(ev, events, now) {
+    const firstPaint = !state.rotateTimer;
     const changed = !ev || ev.id !== state.currentId;
+    clearTimeout(state.rotateTimer);
+    clearTimeout(state.fadeTimer);
     state.currentId = ev ? ev.id : null;
 
-    const show = () => {
-      renderFeature(ev, now);
-      renderList(events, state.currentId, now);
-    };
+    // The list updates at once, so the highlight and its progress bar start
+    // together with the timer below.
+    renderList(events, state.currentId, now);
 
-    if (changed && state.rotateTimer) {
-      const inner = $('feature');
+    const inner = $('feature');
+    if (changed && !firstPaint) {
       inner.className = 'feature-inner fading';
-      setTimeout(() => {
-        show();
+      state.fadeTimer = setTimeout(() => {
+        renderFeature(ev, now);
         inner.className = 'feature-inner';
       }, FADE_MS);
     } else {
-      show(); // first paint, or a single event: no fade
+      renderFeature(ev, now); // first paint, or same event: no fade
+      inner.className = 'feature-inner';
     }
     renderStatus();
     state.rotateTimer = setTimeout(step, ROTATE_MS);
+  }
+
+  function step() {
+    const now = new Date();
+    const events = visibleEvents(now);
+    display(nextEvent(events), events, now);
+  }
+
+  // Tapping a row on the touchscreen features that event; rotation continues from it.
+  function onListTap(e) {
+    const row = e.target.closest ? e.target.closest('.row') : null;
+    if (!row) return;
+    const now = new Date();
+    const events = visibleEvents(now);
+    const ev = events.find((x) => x.id === row.getAttribute('data-id'));
+    if (ev) display(ev, events, now);
   }
 
   function maybeDailyReload() {
@@ -316,6 +335,7 @@
   // ------------------------------------------------------------ start
 
   document.documentElement.style.setProperty('--rotate-ms', ROTATE_MS + 'ms');
+  $('list').addEventListener('click', onListTap);
   loadCached();
   fetchData();
   setInterval(fetchData, POLL_MS);
