@@ -232,6 +232,31 @@
     });
   }
 
+  // "Arrangør" with partner logos (white, via CSS) or names when there's no logo.
+  function renderOrganisers(box, ev) {
+    box.innerHTML = '';
+    const orgs = (ev && ev.organisers) || [];
+    if (!orgs.length) {
+      box.className = 'org hidden';
+      return;
+    }
+    box.className = 'org';
+    box.appendChild(el('span', 'org-label', 'Arrangør'));
+    // Logo height in vh: smaller when several partners share the row.
+    const base = orgs.length <= 2 ? 4.2 : orgs.length === 3 ? 3.4 : 2.8;
+    orgs.forEach((org) => {
+      if (org.logo) {
+        const img = el('img', 'org-logo');
+        img.src = org.logo;
+        img.alt = org.name;
+        img.style.height = (base * (org.scale || 1)).toFixed(2) + 'vh';
+        box.appendChild(img);
+      } else {
+        box.appendChild(el('span', 'org-name', org.name));
+      }
+    });
+  }
+
   function renderFeature(ev, now) {
     // Rebuilding an unchanged image every rotation can flicker on the TV.
     // The key includes the date so a card's "I dag"/"I morgen" still updates.
@@ -242,6 +267,7 @@
     }
     $('feature-when').textContent = ev ? featureWhen(ev, now) : '';
     setTitle($('feature-title'), ev);
+    renderOrganisers($('feature-org'), ev);
     const qr = $('feature-qr');
     if (ev && ev.qr) {
       $('feature-qr-img').src = ev.qr;

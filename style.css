@@ -159,6 +159,42 @@ html, body {
   vertical-align: -0.12em;
 }
 
+/* Organiser: small label and partner logos, made white for the dark screen */
+/* Sits at the bottom of the feature column, under the title and QR */
+.org {
+  flex: none;
+  margin-top: 2vh;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.org.hidden { display: none; }
+.org-label {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 1.2vw;
+  font-size: 1.9vh;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.org-logo {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 1.6vw;
+  -webkit-filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+.org-name {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 1.6vw;
+  font-size: 2.6vh;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .qr { flex: none; width: 17vh; text-align: center; }
 .qr img {
   display: block;

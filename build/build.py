@@ -60,6 +60,7 @@ TWEMOJI_URL = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/{co
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 CACHE_FILE = ROOT / "build" / ".cache" / "media-cache.json"
+PARTNERS_FILE = ROOT / "partners.json"
 APP_FILES = ("index.html", "app.js", "style.css")
 
 # Hosts whose og:image is a product logo, not something about the event.
@@ -93,6 +94,7 @@ class Event:
     all_day: bool
     location: str
     urls: list[str] = field(default_factory=list)
+    organiser_tags: list[str] = field(default_factory=list)
 
 
 def to_local(value: dt.date | dt.datetime) -> tuple[dt.datetime, bool]:
@@ -128,7 +130,10 @@ def extract_urls(*texts: Any) -> list[str]:
         if not text:
             continue
         for match in URL_RE.finditer(html.unescape(str(text))):
-            url = unwrap_redirect(match.group(0).rstrip(URL_TRAILING_JUNK))
+            # Drop invisible formatting characters (e.g. U+2069 from pasted
+            # right-to-left text) that would otherwise end up in the QR code.
+            url = "".join(ch for ch in match.group(0) if unicodedata.category(ch) != "Cf")
+            url = unwrap_redirect(url.rstrip(URL_TRAILING_JUNK))
             if url not in seen:
                 seen.add(url)
                 found.append(url)
@@ -162,6 +167,68 @@ def place_info(location: str) -> tuple[Optional[str], Optional[str]]:
         return None, None
     label = COUNTRY_SUFFIX_RE.sub("", location).strip()
     return label, ("online" if ONLINE_RE.search(folded) else "away")
+
+
+# ------------------------------------------------------------- organisers
+# "Arrangør: Start i Vestfold, Kobben" on its own line in the description
+# (a leading # is fine). Without such a line, links to a partner's domain
+# decide. Partners and their logos are listed in partners.json.
+
+ORGANISER_RE = re.compile(r"^\s*#?\s*arrang(?:ø|o)r(?:er)?\s*:\s*(.+?)\s*$", re.IGNORECASE | re.MULTILINE)
+ORGANISER_SPLIT_RE = re.compile(r"\s*[,&+]\s*")
+HOME_KEYS = ("grunderhuset", "hi5")
+
+
+def description_text(raw: Any) -> str:
+    """Google Calendar descriptions are HTML; turn them into plain lines."""
+    text = re.sub(r"(?i)<br\s*/?>|</(?:p|div|li|h\d)>", "\n", str(raw or ""))
+    return html.unescape(re.sub(r"<[^>]+>", "", text))
+
+
+def organiser_tags(description: Any) -> list[str]:
+    names: list[str] = []
+    for match in ORGANISER_RE.finditer(description_text(description)):
+        names += [n.strip() for n in ORGANISER_SPLIT_RE.split(match.group(1)) if n.strip()]
+    return names
+
+
+def _key(text: str) -> str:
+    """'Start i Vestfold' == 'StartiVestfold' == 'start i vestfold'."""
+    return re.sub(r"[^a-z0-9]", "", _fold(text))
+
+
+class Partners:
+    def __init__(self, entries: list[dict]):
+        self.entries = entries
+        self.by_alias = {_key(a): e for e in entries for a in [e["name"], *e.get("aliases", [])]}
+
+    @classmethod
+    def load(cls, path: Path = PARTNERS_FILE) -> "Partners":
+        return cls(json.loads(path.read_text(encoding="utf-8"))["partners"])
+
+    @staticmethod
+    def _item(entry: dict) -> dict:
+        return {"name": entry["name"], "logo": entry["logo"], "scale": entry.get("scale", 1)}
+
+    def organisers(self, tags: list[str], urls: list[str]) -> list[dict]:
+        """[{name, logo}] for the event. Tags win over links; unknown names get no logo."""
+        found: list[dict] = []
+        if tags:
+            for name in tags:
+                if _key(name).startswith(HOME_KEYS):
+                    continue  # Hi5's own events need no badge on Hi5's screen
+                entry = self.by_alias.get(_key(name))
+                found.append(self._item(entry) if entry else {"name": name, "logo": None, "scale": 1})
+        else:
+            for url in urls:
+                host = urlparse(url).netloc.lower().split(":")[0]
+                for entry in self.entries:
+                    if any(host == d or host.endswith("." + d) for d in entry.get("domains", [])):
+                        found.append(self._item(entry))
+        unique: dict[str, dict] = {}
+        for item in found:
+            unique.setdefault(_key(item["name"]), item)
+        return list(unique.values())
 
 
 def load_calendar(ics: bytes) -> icalendar.Calendar:
@@ -203,12 +270,13 @@ def select_events(
         events.append(
             Event(
                 uid=f"{comp.get('UID', '')}@{start.isoformat()}",
-                title=str(comp.get("SUMMARY", "")).strip() or "Uten tittel",
+                title=" ".join(str(comp.get("SUMMARY", "")).split()) or "Uten tittel",
                 start=start,
                 end=end,
                 all_day=all_day,
                 location=location,
                 urls=urls,
+                organiser_tags=organiser_tags(comp.get("DESCRIPTION")),
             )
         )
     events.sort(key=lambda e: (e.start, e.title))
@@ -491,7 +559,8 @@ def app_version(root: Path = ROOT) -> str:
 
 
 def build_payload(
-    cal: icalendar.Calendar, now: dt.datetime, resolver: MediaResolver, emoji_src, version: str
+    cal: icalendar.Calendar, now: dt.datetime, resolver: MediaResolver, emoji_src,
+    partners: Partners, version: str,
 ) -> dict:
     events = []
     for ev in select_events(cal, now):
@@ -507,6 +576,7 @@ def build_payload(
             "location": ev.location,
             "place": place,
             "place_kind": place_kind,
+            "organisers": partners.organisers(ev.organiser_tags, ev.urls),
             "link": link,
             "image": image,
             "qr": save_qr(link, resolver.data_dir) if link else None,
@@ -560,7 +630,7 @@ def main() -> int:
     resolver = MediaResolver(session, DATA, cache, now)
 
     emoji_store = EmojiStore(session, DATA)
-    payload = build_payload(cal, now, resolver, emoji_store, app_version())
+    payload = build_payload(cal, now, resolver, emoji_store, Partners.load(), app_version())
     changed = write_json_if_changed(DATA / "events.json", payload)
     write_json_if_changed(CACHE_FILE, resolver.prune_cache(), ignore=())
 

@@ -308,3 +308,51 @@ def test_qr_is_svg(tmp_path):
     rel = build.save_qr("https://example.org/x", data)
     svg = (tmp_path / rel).read_text()
     assert svg.startswith("<svg") and "viewBox" in svg
+
+
+# ---------------------------------------------------------------- organisers
+
+def test_extract_urls_drops_invisible_format_chars():
+    assert build.extract_urls("https://ex.no/a?eventID=23947⁩") == ["https://ex.no/a?eventID=23947"]
+
+
+def test_organiser_tags_from_html_description():
+    desc = ("Velkommen!<br>Arrangør: Start i Vestfold, Kobben & Ukjent AS<br>"
+            "<p>#arrangor:Forskningsrådet</p>Mer tekst. Ingen arrangør her: nei")
+    assert build.organiser_tags(desc) == ["Start i Vestfold", "Kobben", "Ukjent AS", "Forskningsrådet"]
+
+
+@pytest.fixture
+def partners():
+    return build.Partners.load()
+
+
+def test_partners_file_logos_exist(partners):
+    for entry in partners.entries:
+        assert (build.ROOT / entry["logo"]).exists(), entry["logo"]
+
+
+def test_tags_match_aliases_and_keep_unknown_names(partners):
+    orgs = partners.organisers(["startivestfold", "innovation norway", "Ukjent AS"], [])
+    assert orgs == [
+        {"name": "Start i Vestfold", "logo": "assets/partners/start-i-vestfold.svg", "scale": 0.85},
+        {"name": "Innovasjon Norge", "logo": "assets/partners/innovasjon-norge.svg", "scale": 1.15},
+        {"name": "Ukjent AS", "logo": None, "scale": 1},
+    ]
+
+
+def test_tags_override_links_and_skip_hi5(partners):
+    urls = ["https://www.startivestfold.no/liste-aktiviteter?eventID=1"]
+    assert partners.organisers(["Gründerhuset Hi5"], urls) == []
+    assert [o["name"] for o in partners.organisers(["Kobben"], urls)] == ["Kobben"]
+
+
+def test_link_domains_when_no_tag(partners):
+    urls = ["https://www.startivestfold.no/x", "https://startivestfold.no/y", "https://example.org"]
+    assert [o["name"] for o in partners.organisers([], urls)] == ["Start i Vestfold"]
+
+
+def test_title_whitespace_collapsed():
+    ics = ICS.replace(b"SUMMARY:Webinar", "SUMMARY:Vaffelonsdag  \U0001f9c7 ".encode())
+    titles = [e.title for e in build.select_events(build.load_calendar(ics), NOW)]
+    assert "Vaffelonsdag \U0001f9c7" in titles

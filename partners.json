@@ -1,0 +1,80 @@
+{
+  "_comment": "Partners shown as 'Arrangør' on the screen. Set by 'Arrangør: <name>' in the event description, or by a link to one of the domains. aliases are matched ignoring case, accents, spaces and punctuation. scale evens out how big each logo looks (1 = normal).",
+  "partners": [
+    {
+      "name": "Start i Vestfold",
+      "logo": "assets/partners/start-i-vestfold.svg",
+      "aliases": [
+        "Start i Vestfold",
+        "StartiVestfold",
+        "SiV"
+      ],
+      "domains": [
+        "startivestfold.no"
+      ],
+      "scale": 0.85
+    },
+    {
+      "name": "Innovasjon Norge",
+      "logo": "assets/partners/innovasjon-norge.svg",
+      "aliases": [
+        "Innovasjon Norge",
+        "Innovation Norway"
+      ],
+      "domains": [
+        "innovasjonnorge.no"
+      ],
+      "scale": 1.15
+    },
+    {
+      "name": "Forskningsrådet",
+      "logo": "assets/partners/forskningsradet.svg",
+      "aliases": [
+        "Forskningsrådet",
+        "Norges forskningsråd",
+        "Research Council of Norway"
+      ],
+      "domains": [
+        "forskningsradet.no"
+      ],
+      "scale": 1.0
+    },
+    {
+      "name": "Kobben",
+      "logo": "assets/partners/kobben.svg",
+      "aliases": [
+        "Kobben",
+        "Kobben teknologiinkubator"
+      ],
+      "domains": [
+        "kobben.no"
+      ],
+      "scale": 0.75
+    },
+    {
+      "name": "Gründeriet",
+      "logo": "assets/partners/grunderiet.svg",
+      "aliases": [
+        "Gründeriet",
+        "Gründeriet Sandefjord"
+      ],
+      "domains": [
+        "grunderiet.no"
+      ],
+      "scale": 0.8
+    },
+    {
+      "name": "Colab",
+      "logo": "assets/partners/colab.png",
+      "aliases": [
+        "Colab",
+        "Colab Larvik"
+      ],
+      "domains": [
+        "colab.no",
+        "colablarvik.no"
+      ],
+      "scale": 0.9
+    }
+  ]
+}
