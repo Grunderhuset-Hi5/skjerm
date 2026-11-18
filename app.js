@@ -91,8 +91,14 @@
       return ev.startDate.getDate() + '.–' + last.getDate() + '. ' + MONTHS_SHORT[last.getMonth()];
     }
     if (ev.endDate <= ev.startDate) return hhmm(ev.startDate);
-    if (dayDiff(ev.endDate, ev.startDate) === 0) return hhmm(ev.startDate) + '–' + hhmm(ev.endDate);
-    return hhmm(ev.startDate) + ' til ' + dayWord(ev.endDate, ev.startDate, true) + ' ' + hhmm(ev.endDate);
+    const days = dayDiff(ev.endDate, ev.startDate);
+    // Same day, or an evening that runs past midnight (ends before 06:00): "19:00–00:00"
+    if (days === 0 || (days === 1 && ev.endDate.getHours() < 6)) {
+      return hhmm(ev.startDate) + '–' + hhmm(ev.endDate);
+    }
+    const end = ev.endDate;
+    return hhmm(ev.startDate) + ' til ' + DAYS_SHORT[end.getDay()] + ' ' + end.getDate() + '. ' +
+      MONTHS_SHORT[end.getMonth()] + ' ' + hhmm(end);
   }
 
   // Shown only for events away from Hi5 (the build decides). Data cached from
