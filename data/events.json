@@ -1,5 +1,5 @@
 {
- "app_version": "df0d931c24b0",
+ "app_version": "a2e10236a13d",
  "calendar": "Felleskalender Gründerhuset Hi5",
  "events": [
   {
@@ -9,6 +9,13 @@
    "image": "data/img/289b6d8c9751b395.webp",
    "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=26948",
    "location": "Webinar",
+   "organisers": [
+    {
+     "logo": "assets/partners/start-i-vestfold.svg",
+     "name": "Start i Vestfold",
+     "scale": 0.85
+    }
+   ],
    "place": "Webinar",
    "place_kind": "online",
    "qr": "data/qr/f7e7ee310a533285.svg",
@@ -23,6 +30,13 @@
    "image": "data/img/9ada4d24aabca2c1.webp",
    "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=28118",
    "location": "Colab Larvik",
+   "organisers": [
+    {
+     "logo": "assets/partners/start-i-vestfold.svg",
+     "name": "Start i Vestfold",
+     "scale": 0.85
+    }
+   ],
    "place": "Colab Larvik",
    "place_kind": "away",
    "qr": "data/qr/df445db436e7e896.svg",
@@ -37,14 +51,15 @@
    "image": "data/img/4847208a716bbb46.webp",
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
    "start": "2026-12-02T11:30:00+01:00",
-   "title": "Vaffelfest 🧇",
+   "title": "Vaffelonsdag 🧇",
    "title_parts": [
     {
-     "text": "Vaffelfest "
+     "text": "Vaffelonsdag "
     },
     {
      "emoji": "🧇",
@@ -59,6 +74,7 @@
    "image": "data/img/fb9d29437b429115.webp",
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -73,6 +89,13 @@
    "image": "data/img/f07ce6a6f23a6040.webp",
    "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=28120",
    "location": "Colab, Kongegata 29, 3256 Larvik",
+   "organisers": [
+    {
+     "logo": "assets/partners/start-i-vestfold.svg",
+     "name": "Start i Vestfold",
+     "scale": 0.85
+    }
+   ],
    "place": "Colab, Kongegata 29, 3256 Larvik",
    "place_kind": "away",
    "qr": "data/qr/20cddb571c674845.svg",
@@ -87,6 +110,7 @@
    "image": null,
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -99,13 +123,20 @@
    "end": "2026-12-09T21:00:00+01:00",
    "id": "70ltkm4t3hvhqlj81s0fmade72@google.com@2026-12-09T18:00:00+01:00",
    "image": "data/img/6f3e8deacdac2b8f.webp",
-   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=23947⁩",
+   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=23947",
    "location": "Gründerhuset Hi5, Tønsberg",
+   "organisers": [
+    {
+     "logo": "assets/partners/start-i-vestfold.svg",
+     "name": "Start i Vestfold",
+     "scale": 0.85
+    }
+   ],
    "place": null,
    "place_kind": null,
-   "qr": "data/qr/26d771b7167c784c.svg",
+   "qr": "data/qr/af7972918ab49b58.svg",
    "start": "2026-12-09T18:00:00+01:00",
-   "title": "INTROKURS: Klar - Ferdig - Start",
+   "title": "Introkurs: Klar - Ferdig - Start",
    "title_parts": null
   },
   {
@@ -115,6 +146,7 @@
    "image": null,
    "link": null,
    "location": "Gründerhuset Hi5, Rådhusgaten 1, 3126 Tønsberg, Norway",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -129,6 +161,7 @@
    "image": null,
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -143,6 +176,7 @@
    "image": "data/img/4847208a716bbb46.webp",
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -165,6 +199,7 @@
    "image": "data/img/fb9d29437b429115.webp",
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -179,6 +214,7 @@
    "image": null,
    "link": null,
    "location": "Gründerhuset Hi5, Rådhusgaten 1, 3126 Tønsberg, Norway",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -193,6 +229,7 @@
    "image": null,
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -207,6 +244,7 @@
    "image": "data/img/4847208a716bbb46.webp",
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -229,6 +267,7 @@
    "image": "data/img/fb9d29437b429115.webp",
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -243,6 +282,7 @@
    "image": null,
    "link": null,
    "location": "Gründerhuset Hi5, Rådhusgaten 1, 3126 Tønsberg, Norway",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -257,6 +297,7 @@
    "image": null,
    "link": null,
    "location": "",
+   "organisers": [],
    "place": null,
    "place_kind": null,
    "qr": null,
@@ -265,5 +306,5 @@
    "title_parts": null
   }
  ],
- "generated": "2026-11-18T13:21:09+01:00"
+ "generated": "2026-11-18T13:41:44+01:00"
 }
