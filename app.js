@@ -189,13 +189,10 @@
     const media = $('media');
     media.innerHTML = '';
     if (ev && ev.image) {
-      const backdrop = el('div', 'backdrop');
-      backdrop.style.backgroundImage = 'url("' + ev.image + '")';
       const photo = el('img', 'photo');
       photo.alt = '';
       photo.onerror = () => { media.innerHTML = ''; media.appendChild(buildCard(ev, now)); };
       photo.src = ev.image;
-      media.appendChild(backdrop);
       media.appendChild(photo);
     } else {
       media.appendChild(buildCard(ev, now));
