@@ -13,7 +13,8 @@
   const POLL_MS = 5 * 60 * 1000;
   const ROTATE_MS = 12000;
   const FADE_MS = 500;
-  const LIST_MAX = 7;
+  const PAGE_SIZE = 7;  // rows per list page
+  const MAX_PAGES = 2;
   const STALE_MS = 60 * 60 * 1000;
   const RELOAD_HOUR = 4; // daily fresh page load, early morning
   const RELOAD_DELAY_MS = 11 * 60 * 1000;
@@ -38,7 +39,9 @@
     lastFetchOk: null,
     loadedAt: Date.now(),
     rotateTimer: null,
-    fadeTimer: null
+    fadeTimer: null,
+    listFadeTimer: null,
+    page: null
   };
 
   const $ = (id) => document.getElementById(id);
@@ -110,7 +113,7 @@
     return state.data.events
       .map(parseEvent)
       .filter((ev) => ev.endDate > now || (ev.endDate <= ev.startDate && ev.startDate >= now))
-      .slice(0, LIST_MAX);
+      .slice(0, PAGE_SIZE * MAX_PAGES);
   }
 
   function applyData(data, fromNetwork) {
@@ -129,7 +132,7 @@
   }
 
   function preload(events) {
-    events.slice(0, LIST_MAX).forEach((ev) => {
+    events.slice(0, PAGE_SIZE * MAX_PAGES).forEach((ev) => {
       if (ev.image) { new Image().src = ev.image; }
       if (ev.qr) { new Image().src = ev.qr; }
       (ev.title_parts || []).forEach((part) => { if (part.src) new Image().src = part.src; });
@@ -240,10 +243,72 @@
     }
   }
 
+  // ------------------------------------------------------------ pages
+  // The list shows PAGE_SIZE events at a time. Rotation runs through all
+  // events in order, so the list flips page when the feature reaches the next
+  // page. The header shows each page's date range, current one highlighted.
+
+  function pageOf(events, id) {
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].id === id) return Math.floor(i / PAGE_SIZE);
+    }
+    return 0;
+  }
+
+  function shortDay(d) { return d.getDate() + '. ' + MONTHS_SHORT[d.getMonth()]; }
+
+  // "9. des", "10.–22. des", "24. nov–9. des"
+  function rangeLabel(evs) {
+    const a = evs[0].startDate;
+    const b = evs[evs.length - 1].startDate;
+    if (dayDiff(b, a) === 0) return shortDay(a);
+    if (a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear()) {
+      return a.getDate() + '.–' + shortDay(b);
+    }
+    return shortDay(a) + '–' + shortDay(b);
+  }
+
+  function renderPages(events, page) {
+    const box = $('pages');
+    box.innerHTML = '';
+    const count = Math.ceil(events.length / PAGE_SIZE);
+    if (count <= 1) {
+      box.appendChild(el('span', 'page-label', 'Kommende'));
+      return;
+    }
+    for (let i = 0; i < count; i++) {
+      if (i) box.appendChild(el('span', 'page-sep', '·'));
+      const label = el('span', 'page' + (i === page ? ' active' : ''),
+        rangeLabel(events.slice(i * PAGE_SIZE, (i + 1) * PAGE_SIZE)));
+      label.setAttribute('data-page', String(i));
+      box.appendChild(label);
+    }
+  }
+
   function renderList(events, activeId, now) {
+    const page = pageOf(events, activeId);
+    const pageChanged = state.page !== null && page !== state.page;
+    state.page = page;
+    renderPages(events, page);
+
+    const list = $('list');
+    clearTimeout(state.listFadeTimer);
+    if (pageChanged) {
+      list.className = 'list fading';
+      state.listFadeTimer = setTimeout(() => {
+        fillList(events, page, activeId, now);
+        list.className = 'list';
+      }, FADE_MS);
+    } else {
+      fillList(events, page, activeId, now);
+      list.className = 'list';
+    }
+  }
+
+  function fillList(events, page, activeId, now) {
     const list = $('list');
     list.innerHTML = '';
-    events.forEach((ev) => {
+    events.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).forEach((ev) => {
       const row = el('li', 'row' + (ev.id === activeId && events.length > 1 ? ' active' : ''));
       row.setAttribute('data-id', ev.id);
       const when = rowWhen(ev, now);
@@ -325,6 +390,16 @@
     if (ev) display(ev, events, now);
   }
 
+  // Tapping a date range in the header jumps to that page's first event.
+  function onPagesTap(e) {
+    const label = e.target.closest ? e.target.closest('.page') : null;
+    if (!label) return;
+    const now = new Date();
+    const events = visibleEvents(now);
+    const ev = events[Number(label.getAttribute('data-page')) * PAGE_SIZE];
+    if (ev) display(ev, events, now);
+  }
+
   function maybeDailyReload() {
     const now = new Date();
     if (now.getHours() === RELOAD_HOUR && Date.now() - state.loadedAt > 2 * 60 * 60 * 1000) {
@@ -336,6 +411,7 @@
 
   document.documentElement.style.setProperty('--rotate-ms', ROTATE_MS + 'ms');
   $('list').addEventListener('click', onListTap);
+  $('pages').addEventListener('click', onPagesTap);
   loadCached();
   fetchData();
   setInterval(fetchData, POLL_MS);

@@ -46,7 +46,7 @@ ICS_URL = (
 )
 TZ = ZoneInfo("Europe/Oslo")
 HORIZON_DAYS = 90
-MAX_EVENTS = 12
+MAX_EVENTS = 21  # room for up to 3 list pages of 7; app.js MAX_PAGES decides how many show
 IMAGE_MAX_PX = 1280
 IMAGE_BACKGROUND = (38, 38, 38)  # flattens transparent PNGs onto the page's panel colour
 MAX_DOWNLOAD_BYTES = 15 * 1024 * 1024

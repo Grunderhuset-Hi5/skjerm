@@ -190,12 +190,30 @@ html, body {
   justify-content: space-between;
   margin-bottom: 3vh;
 }
-.heading {
+/* Page header: one date range per list page, current one highlighted */
+.pages {
   font-size: 2.6vh;
   font-weight: 600;
+  white-space: nowrap;
+}
+.page-label {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
+}
+.page {
+  display: inline-block;
+  padding-bottom: 0.5vh;
+  border-bottom: 0.4vh solid transparent;
+  color: #7c7c7c;
+}
+.page.active {
+  color: var(--text);
+  border-bottom-color: var(--orange);
+}
+.page-sep {
+  margin: 0 0.9vw;
+  color: var(--faint);
 }
 .logo { height: 9vh; }
 
@@ -206,7 +224,10 @@ html, body {
   margin: 0;
   padding: 0;
   list-style: none;
+  opacity: 1;
+  transition: opacity 500ms ease;
 }
+.list.fading { opacity: 0; }
 
 .row {
   position: relative;
