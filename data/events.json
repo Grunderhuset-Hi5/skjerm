@@ -84,7 +84,7 @@
    "all_day": false,
    "end": "2026-12-02T12:30:00+01:00",
    "id": "_8cs4ccq58h2j6b9n74pj6b9k712j4b9o6t0j2b9g6gp46gi58h344dho8o_R20261202T103000@google.com@2026-12-02T11:30:00+01:00",
-   "image": "data/img/4847208a716bbb46.webp",
+   "image": "data/img/8c0461e86270b70a.webp",
    "link": null,
    "location": "",
    "organisers": [],
@@ -92,28 +92,20 @@
    "place_kind": null,
    "qr": null,
    "start": "2026-12-02T11:30:00+01:00",
-   "title": "Vaffelonsdag 🧇",
-   "title_parts": [
-    {
-     "text": "Vaffelonsdag "
-    },
-    {
-     "emoji": "🧇",
-     "src": "data/emoji/1f9c7.svg"
-    }
-   ]
+   "title": "Førsjulsgløgg",
+   "title_parts": null
   },
   {
    "all_day": false,
    "end": "2026-12-02T16:00:00+01:00",
    "id": "_88p36dhp852k4ba364ok6b9k60qk2ba264pk8ba468ojgh1k7513ccq170_R20261202T120000@google.com@2026-12-02T13:00:00+01:00",
    "image": "data/img/fb9d29437b429115.webp",
-   "link": null,
+   "link": "https://app.notion.com/p/Onsdagsressurser-16fbc36023e0807e94a3c20e1006ea2d?source=copy_link",
    "location": "",
    "organisers": [],
    "place": null,
    "place_kind": null,
-   "qr": null,
+   "qr": "data/qr/d495b8db141f1916.svg",
    "start": "2026-12-02T13:00:00+01:00",
    "title": "Onsdagsressursene",
    "title_parts": null
@@ -248,12 +240,12 @@
    "end": "2027-01-06T16:00:00+01:00",
    "id": "_88p36dhp852k4ba364ok6b9k60qk2ba264pk8ba468ojgh1k7513ccq170_R20261202T120000@google.com@2027-01-06T13:00:00+01:00",
    "image": "data/img/fb9d29437b429115.webp",
-   "link": null,
+   "link": "https://app.notion.com/p/Onsdagsressurser-16fbc36023e0807e94a3c20e1006ea2d?source=copy_link",
    "location": "",
    "organisers": [],
    "place": null,
    "place_kind": null,
-   "qr": null,
+   "qr": "data/qr/d495b8db141f1916.svg",
    "start": "2027-01-06T13:00:00+01:00",
    "title": "Onsdagsressursene",
    "title_parts": null
@@ -316,12 +308,12 @@
    "end": "2027-02-03T16:00:00+01:00",
    "id": "_88p36dhp852k4ba364ok6b9k60qk2ba264pk8ba468ojgh1k7513ccq170_R20261202T120000@google.com@2027-02-03T13:00:00+01:00",
    "image": "data/img/fb9d29437b429115.webp",
-   "link": null,
+   "link": "https://app.notion.com/p/Onsdagsressurser-16fbc36023e0807e94a3c20e1006ea2d?source=copy_link",
    "location": "",
    "organisers": [],
    "place": null,
    "place_kind": null,
-   "qr": null,
+   "qr": "data/qr/d495b8db141f1916.svg",
    "start": "2027-02-03T13:00:00+01:00",
    "title": "Onsdagsressursene",
    "title_parts": null
@@ -357,5 +349,5 @@
    "title_parts": null
   }
  ],
- "generated": "2026-11-18T14:23:27+01:00"
+ "generated": "2026-11-18T15:26:26+01:00"
 }
