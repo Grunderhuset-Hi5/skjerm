@@ -133,6 +133,27 @@
   },
   {
    "all_day": false,
+   "end": "2026-12-02T21:00:00+01:00",
+   "id": "89097313-2765-4011-AD7A-3E15EF228057@2026-12-02T18:30:00+01:00",
+   "image": "data/img/8c366266de8d1d21.webp",
+   "link": "https://www.tfnf.no/liste-arrangementer?aiaften-28335",
+   "location": "Friends at Work AS, Storgaten 30, 3126 Tønsberg, Norway",
+   "organisers": [
+    {
+     "logo": "assets/partners/tfnf.png",
+     "name": "Tønsberg og Færder Næringsforening",
+     "scale": 2.0
+    }
+   ],
+   "place": "Friends at Work AS, Storgaten 30, 3126 Tønsberg",
+   "place_kind": "away",
+   "qr": "data/qr/24b85f56de3290f1.svg",
+   "start": "2026-12-02T18:30:00+01:00",
+   "title": "AI:Aften – hva skjedde med AI i 2026, og hva kommer i 2027?",
+   "title_parts": null
+  },
+  {
+   "all_day": false,
    "end": "2026-12-09T11:00:00+01:00",
    "id": "5781186E-A00C-46EA-8230-009220E72AB8@2026-12-09T09:00:00+01:00",
    "image": null,
@@ -349,5 +370,5 @@
    "title_parts": null
   }
  ],
- "generated": "2026-11-18T15:26:26+01:00"
+ "generated": "2026-11-19T11:30:30+01:00"
 }
