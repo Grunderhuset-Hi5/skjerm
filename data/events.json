@@ -154,6 +154,27 @@
   },
   {
    "all_day": false,
+   "end": "2026-12-04T10:00:00+01:00",
+   "id": "7475B54E-FCAF-41F1-9326-D190A5B9F77C@2026-12-04T08:00:00+01:00",
+   "image": "data/img/2e10d5b557efe502.webp",
+   "link": "https://www.tfnf.no/liste-arrangementer?to-ansatte-og-en-flate-av-ai-agenter-effektiviteten-til-et-selskap-pa-over-10-personer-28417",
+   "location": "Stasjonen Business Lounge,  Tollbodgaten 22",
+   "organisers": [
+    {
+     "logo": "assets/partners/tfnf.png",
+     "name": "Tønsberg og Færder Næringsforening",
+     "scale": 2.0
+    }
+   ],
+   "place": "Stasjonen Business Lounge,  Tollbodgaten 22",
+   "place_kind": "away",
+   "qr": "data/qr/903d400e6fc10b2d.svg",
+   "start": "2026-12-04T08:00:00+01:00",
+   "title": "To ansatte og en flåte av AI-agenter – effektiviteten til et selskap på over 10 personer",
+   "title_parts": null
+  },
+  {
+   "all_day": false,
    "end": "2026-12-09T11:00:00+01:00",
    "id": "5781186E-A00C-46EA-8230-009220E72AB8@2026-12-09T09:00:00+01:00",
    "image": null,
@@ -353,22 +374,7 @@
    "start": "2027-02-11T14:00:00+01:00",
    "title": "Allmøte Gründerhuset Hi5",
    "title_parts": null
-  },
-  {
-   "all_day": false,
-   "end": "2027-02-11T19:00:00+01:00",
-   "id": "B1F58777-3797-484E-BF1F-7E29648572D6@2027-02-11T16:00:00+01:00",
-   "image": null,
-   "link": null,
-   "location": "",
-   "organisers": [],
-   "place": null,
-   "place_kind": null,
-   "qr": null,
-   "start": "2027-02-11T16:00:00+01:00",
-   "title": "Afterwork Gründerhuset Hi5",
-   "title_parts": null
   }
  ],
- "generated": "2026-11-19T11:30:30+01:00"
+ "generated": "2026-11-19T22:44:11+01:00"
 }
