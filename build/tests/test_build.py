@@ -356,3 +356,13 @@ def test_title_whitespace_collapsed():
     ics = ICS.replace(b"SUMMARY:Webinar", "SUMMARY:Vaffelonsdag  \U0001f9c7 ".encode())
     titles = [e.title for e in build.select_events(build.load_calendar(ics), NOW)]
     assert "Vaffelonsdag \U0001f9c7" in titles
+
+
+@pytest.mark.parametrize("raw, expected", [
+    ("Stasjonen Business Lounge,  Tollbodgaten 22", "Stasjonen Business Lounge, Tollbodgaten 22"),
+    ("Colab\nKongegata 29", "Colab, Kongegata 29"),
+    ("Colab,\n  Kongegata 29 ", "Colab, Kongegata 29"),
+    ("", ""),
+])
+def test_clean_location(raw, expected):
+    assert build.clean_location(raw) == expected

@@ -141,7 +141,8 @@ def extract_urls(*texts: Any) -> list[str]:
 
 
 def clean_location(raw: Any) -> str:
-    lines = [line.strip() for line in str(raw or "").splitlines()]
+    """One line, single spaces: 'Colab\\nKongegata 29' -> 'Colab, Kongegata 29'."""
+    lines = [" ".join(line.split()).strip(" ,") for line in str(raw or "").splitlines()]
     return ", ".join(line for line in lines if line)
 
 
