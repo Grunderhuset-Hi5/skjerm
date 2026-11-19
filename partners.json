@@ -88,6 +88,21 @@
         "friendsatwork.no"
       ],
       "scale": 0.7
+    },
+    {
+      "name": "Tønsberg og Færder Næringsforening",
+      "logo": "assets/partners/tfnf.png",
+      "aliases": [
+        "Tønsberg og Færder Næringsforening",
+        "TFNF",
+        "Næringsforeningen",
+        "Tønsberg og Færder næringsforening",
+        "Næringsforeningen i Tønsberg og Færder"
+      ],
+      "domains": [
+        "tfnf.no"
+      ],
+      "scale": 2.0
     }
   ]
 }
