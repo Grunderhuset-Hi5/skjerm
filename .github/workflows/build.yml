@@ -2,7 +2,9 @@ name: Build screen data
 
 on:
   schedule:
-    - cron: "7,22,37,52 * * * *" # every 15 min, off the busy :00
+    # Fallback only. Builds are normally started by trigger/apps-script.gs when
+    # the calendar changes; GitHub's own schedule runs late or not at all.
+    - cron: "17 */6 * * *"
   workflow_dispatch:
   push:
     branches: [main]
