@@ -27,7 +27,6 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: "Poppins", "SamsungOne", "Helvetica Neue", Arial, sans-serif;
-  cursor: none;
   -webkit-font-smoothing: antialiased;
   /* Touchscreen: no tap flash, no text selection on long press */
   -webkit-tap-highlight-color: transparent;
