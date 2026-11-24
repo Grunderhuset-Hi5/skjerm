@@ -4,27 +4,6 @@
  "events": [
   {
    "all_day": false,
-   "end": "2026-11-24T12:00:00+01:00",
-   "id": "38drlj8if8l5c8f3f0p9v2q41v@google.com@2026-11-24T09:00:00+01:00",
-   "image": "data/img/289b6d8c9751b395.webp",
-   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=26948",
-   "location": "Webinar",
-   "organisers": [
-    {
-     "logo": "assets/partners/start-i-vestfold.svg",
-     "name": "Start i Vestfold",
-     "scale": 0.85
-    }
-   ],
-   "place": "Webinar",
-   "place_kind": "online",
-   "qr": "data/qr/f7e7ee310a533285.svg",
-   "start": "2026-11-24T09:00:00+01:00",
-   "title": "WEBINAR: Lag bilder, musikk og video med kunstig intelligens",
-   "title_parts": null
-  },
-  {
-   "all_day": false,
    "end": "2026-11-25T16:00:00+01:00",
    "id": "3695884geqmp7nchm887jlofq8@google.com@2026-11-25T13:00:00+01:00",
    "image": "data/img/9ada4d24aabca2c1.webp",
@@ -171,6 +150,27 @@
    "qr": "data/qr/903d400e6fc10b2d.svg",
    "start": "2026-12-04T08:00:00+01:00",
    "title": "To ansatte og en flåte av AI-agenter – effektiviteten til et selskap på over 10 personer",
+   "title_parts": null
+  },
+  {
+   "all_day": false,
+   "end": "2026-12-09T12:00:00+01:00",
+   "id": "38drlj8if8l5c8f3f0p9v2q41v@google.com@2026-12-09T09:00:00+01:00",
+   "image": "data/img/289b6d8c9751b395.webp",
+   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=26948",
+   "location": "Webinar",
+   "organisers": [
+    {
+     "logo": "assets/partners/start-i-vestfold.svg",
+     "name": "Start i Vestfold",
+     "scale": 0.85
+    }
+   ],
+   "place": "Webinar",
+   "place_kind": "online",
+   "qr": "data/qr/f7e7ee310a533285.svg",
+   "start": "2026-12-09T09:00:00+01:00",
+   "title": "WEBINAR: Lag bilder, musikk og video med kunstig intelligens",
    "title_parts": null
   },
   {
@@ -376,5 +376,5 @@
    "title_parts": null
   }
  ],
- "generated": "2026-11-23T11:46:45+01:00"
+ "generated": "2026-11-24T08:06:23+01:00"
 }
