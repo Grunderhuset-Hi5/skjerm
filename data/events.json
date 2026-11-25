@@ -4,27 +4,6 @@
  "events": [
   {
    "all_day": false,
-   "end": "2026-11-25T16:00:00+01:00",
-   "id": "3695884geqmp7nchm887jlofq8@google.com@2026-11-25T13:00:00+01:00",
-   "image": "data/img/9ada4d24aabca2c1.webp",
-   "link": "https://www.startivestfold.no/liste-aktiviteter?eventID=28118",
-   "location": "Colab Larvik",
-   "organisers": [
-    {
-     "logo": "assets/partners/start-i-vestfold.svg",
-     "name": "Start i Vestfold",
-     "scale": 0.85
-    }
-   ],
-   "place": "Colab Larvik",
-   "place_kind": "away",
-   "qr": "data/qr/df445db436e7e896.svg",
-   "start": "2026-11-25T13:00:00+01:00",
-   "title": "Start-kurs: Podkast som verktøy: fra idé til ferdig episode",
-   "title_parts": null
-  },
-  {
-   "all_day": false,
    "end": "2026-11-26T19:00:00+01:00",
    "id": "07h9i5db2jdbk9jor6co3ua6p1@google.com@2026-11-26T17:00:00+01:00",
    "image": null,
@@ -374,7 +353,22 @@
    "start": "2027-02-11T14:00:00+01:00",
    "title": "Allmøte Gründerhuset Hi5",
    "title_parts": null
+  },
+  {
+   "all_day": false,
+   "end": "2027-02-11T19:00:00+01:00",
+   "id": "B1F58777-3797-484E-BF1F-7E29648572D6@2027-02-11T16:00:00+01:00",
+   "image": null,
+   "link": null,
+   "location": "",
+   "organisers": [],
+   "place": null,
+   "place_kind": null,
+   "qr": null,
+   "start": "2027-02-11T16:00:00+01:00",
+   "title": "Afterwork Gründerhuset Hi5",
+   "title_parts": null
   }
  ],
- "generated": "2026-11-24T08:06:23+01:00"
+ "generated": "2026-11-25T22:42:56+01:00"
 }
