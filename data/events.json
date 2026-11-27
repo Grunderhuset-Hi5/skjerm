@@ -4,27 +4,6 @@
  "events": [
   {
    "all_day": false,
-   "end": "2026-11-27T00:00:00+01:00",
-   "id": "3rbrrqrsphdh6clj36qcmb8ncu@google.com@2026-11-26T19:00:00+01:00",
-   "image": "data/img/694c3de1bc23d45b.webp",
-   "link": "https://tally.so/r/8NNvKY",
-   "location": "Saga Kafé, Storgaten 30, 3126 Tønsberg, Norge",
-   "organisers": [
-    {
-     "logo": "assets/partners/friends.png",
-     "name": "FRIENDS:",
-     "scale": 0.7
-    }
-   ],
-   "place": "Saga Kafé, Storgaten 30, 3126 Tønsberg",
-   "place_kind": "away",
-   "qr": "data/qr/b4011291d324c805.svg",
-   "start": "2026-11-26T19:00:00+01:00",
-   "title": "Julebord på Friends:",
-   "title_parts": null
-  },
-  {
-   "all_day": false,
    "end": "2026-12-02T12:30:00+01:00",
    "id": "_8cs4ccq58h2j6b9n74pj6b9k712j4b9o6t0j2b9g6gp46gi58h344dho8o_R20261202T103000@google.com@2026-12-02T11:30:00+01:00",
    "image": "data/img/8c0461e86270b70a.webp",
@@ -355,5 +334,5 @@
    "title_parts": null
   }
  ],
- "generated": "2026-11-26T22:33:42+01:00"
+ "generated": "2026-11-27T05:03:41+01:00"
 }
